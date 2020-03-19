@@ -2,7 +2,7 @@
 
 name: Download file from morph.io
 
-on: on: repository_dispatch
+on: repository_dispatch
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
