@@ -18,7 +18,7 @@ jobs:
 
     # Download the latest file from morph.io
     - name: Download CSV from morph.io
-      run: wget https://morph.io/metaodi/covid-19-scraper-canton-be/data.csv?key=${{ secrets.MORPH_KEY }}&query=select+%2A+from+%22data%22 -O COVID19_Fallzahlen_Kanton_BE_total.csv
+      run: wget https://morph.io/metaodi/covid-19-scraper-canton-be/data.csv?key=$MORPH_KEY&query=select+%2A+from+%22data%22 -O COVID19_Fallzahlen_Kanton_BE_total.csv
 
     # Commit to repo with updated file
     - uses: stefanzweifel/git-auto-commit-action@v4.1.1
