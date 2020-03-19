@@ -132,6 +132,6 @@ gh_repo = os.environ['MORPH_GH_REPO']
 url = 'https://api.github.com/repos/%s/dispatches' % gh_repo
 payload = {"event_type": "update"}
 headers = {'content-type': 'application/json'}
-r = requests.post(url, data=json.dumps(payload), headers=headers)
+r = requests.post(url, data=json.dumps(payload), headers=headers, auth=(gh_user, gh_token))
 print(r)
 
