@@ -20,7 +20,7 @@ jobs:
     - name: Download CSV from morph.io
       env:
         morph_key: ${{ secrets.MORPH_KEY }}
-      run: curl https://morph.io/metaodi/covid-19-scraper-canton-be/data.csv?key=$morph_key&query=select+%2A+from+%22data%22 --output COVID19_Fallzahlen_Kanton_BE_total.csv  
+      run: curl "https://morph.io/metaodi/covid-19-scraper-canton-be/data.csv?key=$morph_key&query=select+%2A+from+%22data%22" --output COVID19_Fallzahlen_Kanton_BE_total.csv  
 
     # Commit to repo with updated file
     - uses: stefanzweifel/git-auto-commit-action@v4.1.1
