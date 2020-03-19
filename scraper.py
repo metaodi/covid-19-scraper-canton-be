@@ -4,8 +4,10 @@ import requests
 from bs4 import BeautifulSoup
 import sqlite3
 import re
+import json
 import dateparser
 import traceback
+import os
 
 DATABASE_NAME = 'data.sqlite'
 conn = sqlite3.connect(DATABASE_NAME)
@@ -120,3 +122,16 @@ except Exception as e:
     raise
 finally:
     conn.close()
+
+
+# trigger GitHub Action API
+gh_user = os.environ['MORPH_GH_USER']
+gh_token = os.environ['MORPH_GH_TOKEN']
+gh_repo = os.environ['MORPH_GH_REPO']
+
+url = 'https://api.github.com/repos/%s/dispatches' % gh_repo
+payload = {"event_type": "update"}
+headers = {'content-type': 'application/json'}
+r = requests.post(url, data=json.dumps(payload), headers=headers)
+print(r)
+
