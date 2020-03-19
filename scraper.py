@@ -10,6 +10,7 @@ import traceback
 DATABASE_NAME = 'data.sqlite'
 conn = sqlite3.connect(DATABASE_NAME)
 c = conn.cursor()
+c.execute('DROP TABLE IF EXISTS data')
 c.execute(
     '''
     CREATE TABLE IF NOT EXISTS data (
@@ -28,6 +29,71 @@ c.execute(
     '''
 )
 conn.commit()
+
+
+# add previous cases
+c = conn.cursor()
+
+c.execute(
+    '''
+    INSERT INTO data (
+        date,
+        time,
+        area,
+        tested,
+        tested_pos, 
+        confirmed,
+        deceased,
+        hospitalized,
+        recovered,
+        source
+    )
+    VALUES
+    (?,?,?,?,?,?,?,?,?,?)
+    ''',
+    [
+        '2020-03-16',
+        '',
+        'Canton_BE',
+        None,
+        131,
+        123,
+        1,
+        None,
+        None,
+        '',
+    ]
+)
+c.execute(
+    '''
+    INSERT INTO data (
+        date,
+        time,
+        area,
+        tested,
+        tested_pos, 
+        confirmed,
+        deceased,
+        hospitalized,
+        recovered,
+        source
+    )
+    VALUES
+    (?,?,?,?,?,?,?,?,?,?)
+    ''',
+    [
+        '2020-03-18',
+        '',
+        'Canton_BE',
+        None,
+        None,
+        193,
+        1,
+        None,
+        None,
+        '',
+    ]
+)
 
 
 def parse_page(soup, conn):
