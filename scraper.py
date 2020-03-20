@@ -32,67 +32,6 @@ c.execute(
 )
 conn.commit()
 
-c.execute(
-    '''
-    INSERT INTO data (
-        date,
-        abbreviation_canton_and_fl,
-        ncumul_conf,
-        ncumul_deceased,
-        source
-    )
-    VALUES
-    (?,?,?,?,?)
-    ''',
-    [
-        '2020-03-16',
-        'BE',
-        123,
-        1,
-        'https://www.besondere-lage.sites.be.ch/besondere-lage_sites/de/index/corona/index.html',
-    ]
-)
-c.execute(
-    '''
-    INSERT INTO data (
-        date,
-        abbreviation_canton_and_fl,
-        ncumul_conf,
-        ncumul_deceased,
-        source
-    )
-    VALUES
-    (?,?,?,?,?)
-    ''',
-    [
-        '2020-03-18',
-        'BE',
-        193,
-        1,
-        'https://www.besondere-lage.sites.be.ch/besondere-lage_sites/de/index/corona/index.html',
-    ]
-)
-c.execute(
-    '''
-    INSERT INTO data (
-        date,
-        abbreviation_canton_and_fl,
-        ncumul_conf,
-        ncumul_deceased,
-        source
-    )
-    VALUES
-    (?,?,?,?,?)
-    ''',
-    [
-        '2020-03-19',
-        'BE',
-        282,
-        1,
-        'https://www.besondere-lage.sites.be.ch/besondere-lage_sites/de/index/corona/index.html',
-    ]
-)
-
 
 def parse_page(soup, conn):
     data = {
