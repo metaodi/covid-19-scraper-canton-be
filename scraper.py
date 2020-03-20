@@ -16,33 +16,96 @@ c.execute(
     '''
     CREATE TABLE IF NOT EXISTS data (
         date text,
-        area text,
-        tested  integer,
-        tested_pos  integer, 
-        confirmed integer,
         time text,
-        deceased integer,
-        hospitalized integer,
-        recovered integer,
+        abbreviation_canton_and_fl text,
+        ncumul_tested  integer,
+        ncumul_conf integer,
+        ncumul_hosp integer,
+        ncumul_ICU integer,
+        ncumul_vent integer,
+        ncumul_released integer,
+        ncumul_deceased integer,
         source text,
-        UNIQUE(date, time)
+        UNIQUE(date, time, abbreviation_canton_and_fl)
     )
     '''
 )
 conn.commit()
 
+c.execute(
+    '''
+    INSERT INTO data (
+        date,
+        abbreviation_canton_and_fl,
+        ncumul_conf,
+        ncumul_deceased,
+        source
+    )
+    VALUES
+    (?,?,?,?,?)
+    ''',
+    [
+        '2020-03-16',
+        'BE',
+        123,
+        1,
+        'https://www.besondere-lage.sites.be.ch/besondere-lage_sites/de/index/corona/index.html',
+    ]
+)
+c.execute(
+    '''
+    INSERT INTO data (
+        date,
+        abbreviation_canton_and_fl,
+        ncumul_conf,
+        ncumul_deceased,
+        source
+    )
+    VALUES
+    (?,?,?,?,?)
+    ''',
+    [
+        '2020-03-18',
+        'BE',
+        193,
+        1,
+        'https://www.besondere-lage.sites.be.ch/besondere-lage_sites/de/index/corona/index.html',
+    ]
+)
+c.execute(
+    '''
+    INSERT INTO data (
+        date,
+        abbreviation_canton_and_fl,
+        ncumul_conf,
+        ncumul_deceased,
+        source
+    )
+    VALUES
+    (?,?,?,?,?)
+    ''',
+    [
+        '2020-03-19',
+        'BE',
+        282,
+        1,
+        'https://www.besondere-lage.sites.be.ch/besondere-lage_sites/de/index/corona/index.html',
+    ]
+)
+
 
 def parse_page(soup, conn):
     data = {
         'date': None,
-        'area': 'Canton_BE',
-        'tested': None,
-        'tested_pos': None, 
-        'confirmed': None,
         'time': '',
-        'deceased': None,
+        'area': 'BE',
+        'tested': None,
+        'confirmed': None,
         'hospitalized': None,
-        'recovered': None,
+        'icu': None,
+        'vent': None,
+        'released': None,
+        'deceased': None,
         'source': 'https://www.besondere-lage.sites.be.ch/besondere-lage_sites/de/index/corona/index.html',
     }
 
@@ -71,33 +134,36 @@ def parse_page(soup, conn):
     c = conn.cursor()
 
     try:
+        print(data)
         c.execute(
             '''
             INSERT INTO data (
                 date,
                 time,
-                area,
-                tested,
-                tested_pos, 
-                confirmed,
-                deceased,
-                hospitalized,
-                recovered,
+                abbreviation_canton_and_fl,
+                ncumul_tested,
+                ncumul_conf,
+                ncumul_hosp,
+                ncumul_ICU,
+                ncumul_vent,
+                ncumul_released,
+                ncumul_deceased,
                 source
             )
             VALUES
-            (?,?,?,?,?,?,?,?,?,?)
+            (?,?,?,?,?,?,?,?,?,?,?)
             ''',
             [
                 data['date'],
                 data['time'],
                 data['area'],
                 data['tested'],
-                data['tested_pos'],
                 data['confirmed'],
-                data['deceased'],
                 data['hospitalized'],
-                data['recovered'],
+                data['icu'],
+                data['vent'],
+                data['released'],
+                data['deceased'],
                 data['source'],
             ]
         )
@@ -125,13 +191,14 @@ finally:
 
 
 # trigger GitHub Action API
-gh_user = os.environ['MORPH_GH_USER']
-gh_token = os.environ['MORPH_GH_TOKEN']
-gh_repo = os.environ['MORPH_GH_REPO']
+if 'MORPH_GH_USER' in os.environ:
+    gh_user = os.environ['MORPH_GH_USER']
+    gh_token = os.environ['MORPH_GH_TOKEN']
+    gh_repo = os.environ['MORPH_GH_REPO']
 
-url = 'https://api.github.com/repos/%s/dispatches' % gh_repo
-payload = {"event_type": "update"}
-headers = {'content-type': 'application/json'}
-r = requests.post(url, data=json.dumps(payload), headers=headers, auth=(gh_user, gh_token))
-print(r)
+    url = 'https://api.github.com/repos/%s/dispatches' % gh_repo
+    payload = {"event_type": "update"}
+    headers = {'content-type': 'application/json'}
+    r = requests.post(url, data=json.dumps(payload), headers=headers, auth=(gh_user, gh_token))
+    print(r)
 
